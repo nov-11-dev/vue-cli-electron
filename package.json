@@ -3,8 +3,10 @@
   "version": "0.1.1",
   "private": true,
   "scripts": {
+    "dev": "vue-cli-service electron:serve",
+    "build": "vue-cli-service electron:build",
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build:web": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
@@ -21,6 +23,7 @@
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "babel-eslint": "^10.1.0",
+    "cz-conventional-changelog": "^3.3.0",
     "electron": "^13.0.0",
     "electron-builder": "^22.14.5",
     "electron-devtools-installer": "^3.1.0",
@@ -48,5 +51,10 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }

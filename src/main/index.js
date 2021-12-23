@@ -6,10 +6,11 @@ import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import { autoUpdater } from 'electron-updater'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
+const isProduction = process.env.NODE_ENV === 'production'
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
-  { scheme: 'app', privileges: { secure: true, standard: true } }
+  { scheme: 'app', privileges: { secure: true, standard: true } },
 ])
 
 autoUpdater.autoInstallOnAppQuit = false
@@ -40,20 +41,20 @@ autoUpdater.on('update-downloaded', (ev, releaseNotes, releaseName) => {
     buttons: ['确定', '取消'],
     title: '应用更新',
     message: process.platform === 'win32' ? releaseNotes : releaseName,
-    detail: '发现有新版本，是否更新？'
+    detail: '发现有新版本，是否更新？',
   }
-  dialog.showMessageBox(options).then(returnVal => {
+  dialog.showMessageBox(options).then((returnVal) => {
     if (returnVal.response === 0) {
       console.log('开始更新')
       setTimeout(() => {
         autoUpdater.quitAndInstall()
-      }, 5000);
+      }, 5000)
     } else {
       console.log('取消更新')
       return
     }
   })
-});
+})
 
 async function createWindow() {
   // Create the browser window.
@@ -61,7 +62,6 @@ async function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       // nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
@@ -69,7 +69,7 @@ async function createWindow() {
       nodeIntegration: true,
       enableRemoteModule: true,
       contextIsolation: false,
-    }
+    },
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -111,7 +111,9 @@ app.on('ready', async () => {
     }
   }
   createWindow()
-  autoUpdater.checkForUpdates()
+  if (isProduction) {
+    autoUpdater.checkForUpdates()
+  }
 })
 
 // Exit cleanly on request from parent process in development mode.
